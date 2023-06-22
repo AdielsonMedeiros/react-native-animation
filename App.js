@@ -6,11 +6,36 @@ export default function App() {
 
   const larAnimada = useRef(new Animated.Value(150)).current;
   const altAnimada = useRef(new Animated.Value(50)).current;
+  const opacidadeAnimada = useRef(new Animated.Value(1)).current;
 
   useEffect(()=>{
-    Animated.timing(larAnimada, {toValue: 300, duration: 5000, useNativeDriver: false}).start();
-    Animated.timing(altAnimada, {toValue: 150, duration: 5000, useNativeDriver: false}).start();
+    Animated.sequence([
+      Animated.timing(opacidadeAnimada, {
+        toValue: 1,
+        duration: 2000,
+        useNativeDriver: false
+      }),
 
+      Animated.parallel([
+        Animated.timing(larAnimada, {
+          toValue: 300,
+          duration: 2000,
+          useNativeDriver: false
+        }),
+        Animated.timing(altAnimada, {
+          toValue: 300,
+          duration: 2000,
+          useNativeDriver: false
+        }),
+      ]),
+
+      Animated.timing(opacidadeAnimada, {
+        toValue: 0,
+        duration: 2000,
+        useNativeDriver: false
+      })
+
+    ]).start();
 
   }, [])
 
@@ -20,7 +45,7 @@ export default function App() {
     <View style={styles.container}>
 
 
-    <Animated.View style={{width: larAnimada, height:altAnimada, backgroundColor: '#4169e1', justifyContent:'center', alignItems:'center'}}>
+    <Animated.View style={{width: larAnimada, height:altAnimada, backgroundColor: '#4169e1', justifyContent:'center', opacity: opacidadeAnimada}}>
       <Text style={{textAlign:'center', fontSize:22, color: '#fff'}}> loading... </Text>
 
     </Animated.View>
