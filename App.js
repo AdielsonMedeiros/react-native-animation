@@ -1,63 +1,64 @@
-
-import React, {useRef, useEffect} from 'react';
-import { StyleSheet, Text, View, Animated } from 'react-native';
+import React, { useRef, useEffect} from 'react';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 
 export default function App() {
-
-  const larAnimada = useRef(new Animated.Value(150)).current;
+  const larAnimada = useRef(new Animated.Value(0)).current;
   const altAnimada = useRef(new Animated.Value(50)).current;
-  const opacidadeAnimada = useRef(new Animated.Value(1)).current;
 
-  useEffect(()=>{
-  Animated.loop(
+  useEffect(()=> {
+
+
     Animated.sequence([
-      Animated.timing(opacidadeAnimada, {
-        toValue: 1,
-        duration: 1000,
+      Animated.timing(larAnimada, {
+        toValue: 100,
+        duration: 4000,
         useNativeDriver: false
       }),
 
-      Animated.parallel([
-        Animated.timing(larAnimada, {
-          toValue: 300,
-          duration: 1000,
-          useNativeDriver: false
-        }),
-        Animated.timing(altAnimada, {
-          toValue: 50,
-          duration: 1000,
-          useNativeDriver: false
-        }),
-      ]),
-
-      Animated.timing(opacidadeAnimada, {
-        toValue: 0,
-        duration: 1000,
+      Animated.timing(altAnimada, {
+        toValue: 100,
+        duration: 4000,
         useNativeDriver: false
       })
-
-    ])).start();
-
-  }, [])
-
+    ]).start( () => {
+      alert('ANIMAÇAO FINALIZADA!');
+    });
 
 
-  return (
-    <View style={styles.container}>
+  }, []);
 
+  let procentagemLargura = larAnimada.interpolate({
+    inputRange: [0, 100], //Entrada
+    outputRange: ['0%', '100%'] //Vai sair 0% até 100%
+  })
 
-    <Animated.View style={{width: larAnimada, height:altAnimada, backgroundColor: '#4169e1', justifyContent:'center', opacity: opacidadeAnimada, borderRadius: 30}}>
-      <Text style={{textAlign:'center', fontSize:22, color: '#fff'}}> loading... </Text>
+  let porcentagemAltura = altAnimada.interpolate({
+    inputRange: [50, 100],
+    outputRange: ['5%', '100%']
+  })
 
-    </Animated.View>
-    </View>
+ return (
+   <View style={styles.container}>
+
+      <Animated.View 
+      style={{ 
+        width: procentagemLargura,
+        height: porcentagemAltura,
+        backgroundColor: '#4169e1',
+        justifyContent: 'center',
+      }}
+      >
+
+      </Animated.View>
+
+   </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
+  container:{
+    flex:1,
     justifyContent: 'center',
-  },
-});
+    alignItems: 'center'
+  }
+})
